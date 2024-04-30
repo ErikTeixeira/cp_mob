@@ -3,17 +3,20 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'space-around',
+        backgroundColor: '#eee',
+        alignItems: 'center',
+        flex: 1,
     },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-    }
-});
+    title: {
+        fontWeight: 'bold',
+        fontSize: 50,
+        color: '#842'
+    },
+    image: {
+      width: '80%',
+      aspectRatio: 1
+    },
+  })
 
 export default styles;
