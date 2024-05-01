@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { Button, View, Text } from 'react-native';
+import { View, Text, Pressable  } from 'react-native';
 
-import InputText from './InputText/index';
+import InputText from '../../components/InputText/index';
 import { adicionarProduto } from './AddProduto/index';
 
 import styles from "./style";
@@ -20,10 +20,15 @@ const AddScreen = ({ navigation }) => {
 
       <Text style={styles.title}>Adicionar Produto</Text>
 
-      <Button
-        title="Voltar"
+      <Pressable 
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#0D2C61' : '#2A4C7C' }
+        ]}
         onPress={() => navigation.navigate('Home')}
-      />
+      >
+        <Text style={styles.text}>Voltar</Text>
+      </Pressable>
 
       <InputText
         placeholder="Produto"
@@ -35,14 +40,18 @@ const AddScreen = ({ navigation }) => {
         placeholder="Quantidade"
         value={quantidade}
         onChangeText={setQuantidade}
-        keyboardType="numeric"
-        keyboardType="numeric"
+        inputMode="numeric"
       />
       
-      <Button
-        title="Adicionar"
+      <Pressable 
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#0D2C61' : '#2A4C7C' }
+        ]}
         onPress={adicionar}
-      />
+      >
+        <Text style={styles.text}>Adicionar</Text>
+      </Pressable>
     </View>
   );
 };
