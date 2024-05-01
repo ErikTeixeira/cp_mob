@@ -1,38 +1,50 @@
+import React, { useState } from 'react';
 
-import { Button, View, Text, StyleSheet } from 'react-native';
+import { Button, View, Text } from 'react-native';
 
-// Trabalhar na parte visual da página inicial
+import InputText from './InputText/index';
+import { adicionarProduto } from './AddProduto/index';
+
+import styles from "./style";
+
 const AddScreen = ({ navigation }) => {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>
-          Jogo da Veia
-        </Text>
-        
-        <Button
-          title="Play"
-          onPress={() => navigation.navigate('Home')} // Esse botão precisa ir para a página do jogo
-        />
-      </View>
-    );
-  }
+  const [produto, setProduto] = useState('');
+  const [quantidade, setQuantidade] = useState('');
 
-const styles = StyleSheet.create({
-  container: {
-      justifyContent: 'space-around',
-      backgroundColor: '#eee',
-      alignItems: 'center',
-      flex: 1,
-  },
-  title: {
-      fontWeight: 'bold',
-      fontSize: 50,
-      color: '#842'
-  },
-  image: {
-    width: '80%',
-    aspectRatio: 1
-  },
-})
+  const adicionar = () => {
+    adicionarProduto(produto, quantidade);
+  };
+
+  return (
+    <View style={styles.container}>
+
+      <Text style={styles.title}>Adicionar Produto</Text>
+
+      <Button
+        title="Voltar"
+        onPress={() => navigation.navigate('Home')}
+      />
+
+      <InputText
+        placeholder="Produto"
+        value={produto}
+        onChangeText={setProduto}
+      />
+
+      <InputText
+        placeholder="Quantidade"
+        value={quantidade}
+        onChangeText={setQuantidade}
+        keyboardType="numeric"
+        keyboardType="numeric"
+      />
+      
+      <Button
+        title="Adicionar"
+        onPress={adicionar}
+      />
+    </View>
+  );
+};
 
 export default AddScreen;

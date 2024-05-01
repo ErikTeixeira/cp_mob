@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, View, Text } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { app } from '../../firebaseConfig';
+
 import styles from "./style";
 
 const HomeScreen = ({ navigation }) => {
