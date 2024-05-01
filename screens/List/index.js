@@ -1,38 +1,70 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
+import { getDatabase, ref, onValue, remove } from "firebase/database";
+import { app } from '../../firebaseConfig';
 
-import { Button, View, Text, StyleSheet } from 'react-native';
+import styles from "./style";
 
-// Trabalhar na parte visual da página inicial
+
 const ListScreen = ({ navigation }) => {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>
-          Jogo da Veia
-        </Text>
-        
-        <Button
-          title="Play"
-          onPress={() => navigation.navigate('Home')} // Esse botão precisa ir para a página do jogo
-        />
-      </View>
-    );
-  }
 
-const styles = StyleSheet.create({
-  container: {
-      justifyContent: 'space-around',
-      backgroundColor: '#eee',
-      alignItems: 'center',
-      flex: 1,
-  },
-  title: {
-      fontWeight: 'bold',
-      fontSize: 50,
-      color: '#842'
-  },
-  image: {
-    width: '80%',
-    aspectRatio: 1
-  },
-})
+  const [listaCompras, setListaCompras] = useState([]);
+
+  useEffect(() => {
+    const db = getDatabase(app);
+    const listaRef = ref(db, 'listaCompras');
+    
+    onValue(listaRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const lista = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        setListaCompras(lista);
+      } else {
+        setListaCompras([]);
+      }
+    });
+
+    // Cleanup function
+    return () => {
+      // Detach the listener when component unmounts
+      onValue(listaRef, null);
+    };
+  }, []);
+
+  const handleDeleteItem = (itemId) => {
+    const db = getDatabase(app);
+    const itemRef = ref(db, `listaCompras/${itemId}`);
+    remove(itemRef)
+      .then(() => {
+        console.log('Item deletado com sucesso!');
+      })
+      .catch((error) => {
+        console.error('Erro ao deletar o item:', error);
+      });
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.itemContainer} onPress={() => handleDeleteItem(item.id)}>
+      <Text>{item.produto} - {item.quantidade}</Text>
+      <Button title="Excluir" onPress={() => handleDeleteItem(item.id)} />
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Lista de Compras</Text>
+      <FlatList
+        data={listaCompras}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
+      <Button
+        title="Voltar"
+        onPress={() => navigation.navigate('Home')}
+      />
+    </View>
+  );
+};
+
 
 export default ListScreen;
