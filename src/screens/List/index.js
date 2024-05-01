@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Pressable } from 'react-native';
 import { getDatabase, ref, onValue, remove } from "firebase/database";
-import { app } from '../../firebaseConfig';
+import { app } from '../../../firebaseConfig';
 
 import styles from "./style";
-
 
 const ListScreen = ({ navigation }) => {
 
@@ -24,9 +23,7 @@ const ListScreen = ({ navigation }) => {
       }
     });
 
-    // Cleanup function
     return () => {
-      // Detach the listener when component unmounts
       onValue(listaRef, null);
     };
   }, []);
@@ -44,27 +41,50 @@ const ListScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
+
     <TouchableOpacity style={styles.itemContainer} onPress={() => handleDeleteItem(item.id)}>
-      <Text>{item.produto} - {item.quantidade}</Text>
-      <Button title="Excluir" onPress={() => handleDeleteItem(item.id)} />
+
+      <Text style={styles.textProduct} >{item.produto} - {item.quantidade}</Text>
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#0D2C61' : '#2A4C7C' }
+        ]}
+
+        onPress={() => handleDeleteItem(item.id)}
+      >
+        <Text style={styles.text}>Excluir</Text>
+      </Pressable>
+      
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
+
       <Text style={styles.title}>Lista de Compras</Text>
+
       <FlatList
         data={listaCompras}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-      <Button
-        title="Voltar"
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#0D2C61' : '#2A4C7C' }
+        ]}
+
         onPress={() => navigation.navigate('Home')}
-      />
+      >
+
+        <Text style={styles.text}>Voltar</Text>
+
+      </Pressable>
     </View>
   );
 };
-
 
 export default ListScreen;

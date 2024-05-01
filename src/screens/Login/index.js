@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import { Text, View, TextInput, Pressable } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { app } from '../../firebaseConfig';
+import { app } from '../../../firebaseConfig';
+import InputText from '../../components/InputText/index';
 
 import styles from "./style";
 
@@ -59,26 +60,45 @@ const LoginScreen = ({ navigation }) => {
   
   return (
     <View style={styles.container}>
-      <Text>Lista de compras</Text>
-      <TextInput 
+
+      <Text style={styles.title} >Lista de compras</Text>
+
+      <InputText
         style={styles.input} 
         value={email}
         onChangeText={setEmail}
         placeholder='email'
       />
-      <TextInput 
+      
+      <InputText
         style={styles.input} 
         value={pass}
         onChangeText={setPass}
         placeholder='senha'
       />
 
-      <Button 
-        title='Login' 
-        onPress={loginUser}
-      />
+      <Pressable 
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#0D2C61' : '#2A4C7C' }
+        ]}
 
-      <Button title='Cadastrar' onPress={createUser} />
+        onPress={loginUser}
+      >
+        <Text style={styles.text}>Login</Text>
+      </Pressable>
+
+      <Pressable 
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: pressed ? '#0D2C61' : '#2A4C7C' }
+        ]}
+
+        onPress={createUser}
+      >
+        <Text style={styles.text}>Cadastrar</Text>
+      </Pressable>
+
     </View>
   );
   
